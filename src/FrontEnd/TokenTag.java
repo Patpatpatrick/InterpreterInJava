@@ -1,3 +1,5 @@
+package FrontEnd;
+
 public enum  TokenTag {
     KW, //  keywords, for example "if"
     OPR, // operators like +-*/%...

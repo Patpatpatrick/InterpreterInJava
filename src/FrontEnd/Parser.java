@@ -1,15 +1,16 @@
-import java.util.ArrayList;
+package FrontEnd;
 
 /**
  * This class is responsible for requesting a token from Scanner
  * So it has a member of Scanner
+ *
+ *
+ *
  */
 
+//TODO: should make the implementation of interface methods right in this abstract class!!
 
 public abstract class Parser {
-
-    // this is what parser will pass to the backend at last.
-    private ArrayList<Token> tokens;
 
     private AST root;
 
@@ -18,7 +19,6 @@ public abstract class Parser {
 
     public Parser(Scanner scanner) {
         this.scanner=scanner;
-        this.tokens = new ArrayList<>();
     }
 
     /**
@@ -27,12 +27,8 @@ public abstract class Parser {
      */
     public abstract void parse() throws Exception;
 
-    private void addToken(Token token){
-        tokens.add(token);
-    }
-
-    private Token getNextToken(){
-        return scanner.getNextToken();
+    private Token getToken(){
+        return scanner.extractToken();
     }
 
     /**

@@ -1,3 +1,5 @@
+package FrontEnd;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -11,24 +13,27 @@ import java.nio.file.Paths;
 
 public class Source {
 
+    public static final char EOL = '\n';
+    public static final char EOF = (char) 0;
+
     private BufferedReader reader;
 
     // where you will be finding char to return
     private String currentWholeLine;
 
-    // in constructor currentLineRead is -1 means no line has been read at all
+    // in constructor numOfLineRead is -1 means no line has been read at all
     // this is the vertical coordination
-    private int currentLineRead;
+    private int numOfLineRead;
 
 
-    // in constructor currentLineRead is -1 means no char in this line has been read at all
+    // in constructor numOfLineRead is -1 means no char in this line has been read at all
     // this is the horizontal coordination
-    private int currentOffset;
+    private int toReadCharOnThisPos;
 
     public Source(String path) {
         readFromFileSystem(path);
-        this.currentLineRead= -1;
-        this.currentOffset= -1;
+        this.numOfLineRead= 0;
+        this.toReadCharOnThisPos= 0;
     }
 
     /**
@@ -46,19 +51,32 @@ public class Source {
 
 
     private char readOnCurrOffset() throws IOException {
-        // the first time that we read the file
-        if(currentOffset == -1 && currentLineRead == -1){
-
+        char ret;
+        // the first time that we read the file, so current offset is 0 dist away from the start of this line
+        if (toReadCharOnThisPos == 0) {
+            readWholeLine();
+            if(currentWholeLine != null){
+                numOfLineRead++;
+                ret=currentWholeLine.charAt(toReadCharOnThisPos);
+            }else{
+                ret = EOF;
+            }
         }
-        return (char) reader.read();
+        else if (toReadCharOnThisPos == currentWholeLine.length()) {
+            toReadCharOnThisPos= 0;
+            ret = EOL;
+        }
+        else{
+            assert currentWholeLine != null;
+            ret=currentWholeLine.charAt(toReadCharOnThisPos);
+        }
+        toReadCharOnThisPos++;
+        return ret;
     }
 
     private void readWholeLine() throws IOException {
-        assert currentOffset == -1;
+        assert toReadCharOnThisPos == 0;
         currentWholeLine= reader.readLine();
-        if(currentWholeLine != null){
-            currentLineRead++;
-        }
     }
 
     /**
