@@ -1,5 +1,8 @@
 package FrontEnd;
 
+import Message.Message;
+import Message.MessageBroadCaster;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -13,6 +16,7 @@ import java.nio.file.Paths;
 
 public class Source {
 
+    private MessageBroadCaster messageBroadCaster;
     public static final char EOL = '\n';
     public static final char EOF = (char) 0;
 
@@ -34,6 +38,7 @@ public class Source {
         readFromFileSystem(path);
         this.numOfLineRead= 0;
         this.toReadCharOnThisPos= 0;
+        this.messageBroadCaster= new MessageBroadCaster(new Message());
     }
 
     /**

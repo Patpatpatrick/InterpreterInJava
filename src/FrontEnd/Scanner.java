@@ -1,5 +1,7 @@
 package FrontEnd;
 
+import Message.MessageBroadCaster;
+
 /**
  *
  * It's a Lexer.
@@ -12,6 +14,8 @@ package FrontEnd;
  */
 
 public abstract class Scanner {
+
+    private static MessageBroadCaster messageBroadCaster;
 
     private Source source;
 

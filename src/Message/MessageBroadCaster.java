@@ -2,14 +2,14 @@ package Message;
 
 import java.util.ArrayList;
 
-public class MessageProducer implements MessageProducerAPI {
+public class MessageBroadCaster implements MessageBroadCasterAPI {
 
-    private Message message;    // 消息
-    private ArrayList<MessageObserver> listeners;  // 监听器列表
+    private Message message;
 
-    public MessageProducer(Message message,ArrayList<MessageObserver> listeners) {
+    private ArrayList<MessageObserver> listeners = new ArrayList<MessageObserver>();
+
+    public MessageBroadCaster(Message message) {
         this.message=message;
-        this.listeners=listeners;
     }
 
 

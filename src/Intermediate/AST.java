@@ -1,4 +1,4 @@
-package FrontEnd;
+package Intermediate;
 
 public interface AST {
 

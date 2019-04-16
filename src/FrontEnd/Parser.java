@@ -1,5 +1,8 @@
 package FrontEnd;
 
+import Intermediate.AST;
+import Message.MessageBroadCaster;
+
 /**
  * This class is responsible for requesting a token from Scanner
  * So it has a member of Scanner
@@ -12,7 +15,11 @@ package FrontEnd;
 
 public abstract class Parser {
 
+    private static MessageBroadCaster messageBroadCaster;
+
     private AST root;
+
+    private boolean succeed;
 
     //Parser instance will refer to Scanner to obtain token instance
     private final Scanner scanner;
