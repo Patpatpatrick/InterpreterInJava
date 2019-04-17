@@ -1,21 +1,21 @@
 package FrontEnd;
 
 import Intermediate.AST;
+import Intermediate.SymTab;
 import Message.MessageBroadCaster;
+
+import java.io.IOException;
 
 /**
  * This class is responsible for requesting a token from Scanner
  * So it has a member of Scanner
- *
- *
- *
  */
 
 //TODO: should make the implementation of interface methods right in this abstract class!!
 
-public abstract class Parser {
+public abstract class Parser extends MessageBroadCaster{
 
-    private static MessageBroadCaster messageBroadCaster;
+    private SymTab table; // generated symbol table
 
     private AST root;
 
@@ -26,6 +26,8 @@ public abstract class Parser {
 
     public Parser(Scanner scanner) {
         this.scanner=scanner;
+        table = null;
+        root = null;
     }
 
     /**
@@ -34,15 +36,17 @@ public abstract class Parser {
      */
     public abstract void parse() throws Exception;
 
-    private Token getToken(){
-        return scanner.extractToken();
+    private Token currentToken() throws IOException {
+        return scanner.currentToken();
+    }
+
+    private Token nextToken() throws IOException {
+        return scanner.nextToken();
     }
 
     /**
-     *
+     * language dependent, so make abstract.
      * @return # of errors in the source code
      */
-    public int getErrorCount(){
-        return 0;
-    }
+    public abstract int getErrorCount();
 }

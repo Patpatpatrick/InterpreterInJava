@@ -4,7 +4,7 @@ import Intermediate.AST;
 import Message.MessageBroadCaster;
 
 public abstract class BackEndCoreWidget {
-    protected MessageBroadCaster messageBroadCaster;
+    MessageBroadCaster messageBroadCaster;
 
     protected AST ast;
 

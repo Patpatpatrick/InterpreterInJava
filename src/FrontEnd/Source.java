@@ -14,9 +14,8 @@ import java.nio.file.Paths;
  *
  */
 
-public class Source {
+public class Source extends MessageBroadCaster{
 
-    private MessageBroadCaster messageBroadCaster;
     public static final char EOL = '\n';
     public static final char EOF = (char) 0;
 
@@ -38,7 +37,6 @@ public class Source {
         readFromFileSystem(path);
         this.numOfLineRead= 0;
         this.toReadCharOnThisPos= 0;
-        this.messageBroadCaster= new MessageBroadCaster(new Message());
     }
 
     /**
@@ -68,15 +66,39 @@ public class Source {
             }
         }
         else if (toReadCharOnThisPos == currentWholeLine.length()) {
-            toReadCharOnThisPos= 0;
             ret = EOL;
         }
         else{
-            assert currentWholeLine != null;
             ret=currentWholeLine.charAt(toReadCharOnThisPos);
         }
-        toReadCharOnThisPos++;
         return ret;
+    }
+
+    public char readNextChar() throws IOException {
+        if(toReadCharOnThisPos == currentWholeLine.length()){
+            toReadCharOnThisPos = 0;
+        }
+        else{
+            toReadCharOnThisPos++;
+        }
+        return readOnCurrOffset();
+    }
+
+    /**
+     * peek next char but not consume the current char。
+     * @return
+     * @throws Exception
+     */
+    public char peekChar()
+            throws Exception
+    {
+        readOnCurrOffset();
+        if (currentWholeLine == null) {
+            return EOF;
+        }
+
+        int nextPos = toReadCharOnThisPos + 1;
+        return nextPos < currentWholeLine.length() ? currentWholeLine.charAt(nextPos) : EOL;
     }
 
     private void readWholeLine() throws IOException {

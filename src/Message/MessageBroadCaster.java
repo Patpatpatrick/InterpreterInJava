@@ -13,6 +13,10 @@ public class MessageBroadCaster implements MessageBroadCasterAPI {
         listeners = new ArrayList<MessageObserver>();
     }
 
+    public MessageBroadCaster() {
+
+    }
+
     public void setMessage(Message message) {
         this.message=message;
     }

@@ -7,7 +7,7 @@ import Message.MessageType;
 /**
  * this is our interpreter
  */
-public class SourceCodePerformer extends BackEndCoreWidget {
+public class Interpreter extends BackEndCoreWidget {
 
     @Override
     public void perform(AST ast) {
@@ -16,10 +16,10 @@ public class SourceCodePerformer extends BackEndCoreWidget {
         int executionCount = 0;
         int runtimeErrors = 0;
         messageBroadCaster.setMessage(
-                new Message(
-                        MessageType.INTERPRETER_SUMMARY,
-                        new Number[] {executionCount,runtimeErrors,elapsedTime}
-                )
+            new Message(
+                    MessageType.INTERPRETER_SUMMARY,
+                    new Number[] {executionCount,runtimeErrors,elapsedTime}
+            )
         );
         messageBroadCaster.sendMessage();
     }

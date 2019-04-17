@@ -21,6 +21,7 @@ public abstract class Scanner {
 
     private Source source;
 
+    // Scanner owns the current Token member
     private Token currentToken;
 
 
@@ -32,4 +33,7 @@ public abstract class Scanner {
         return source.readOnCurrOffset();
     }
 
+    public abstract Token currentToken();
+
+    public abstract Token nextToken();
 }
