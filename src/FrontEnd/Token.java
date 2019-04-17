@@ -23,5 +23,9 @@ public class Token {
         this.offSet=offSet;
         this.tokenLength=tokenLength;
     }
+
+    public Token() {
+
+    }
 }
 

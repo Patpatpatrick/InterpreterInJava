@@ -2,6 +2,8 @@ package FrontEnd;
 
 import Message.MessageBroadCaster;
 
+import java.io.IOException;
+
 /**
  *
  * It's a Lexer.
@@ -24,9 +26,10 @@ public abstract class Scanner {
 
 
     // currentToken should be assigned in this method override in the subclass.
-    public abstract Token extractToken();
+    public abstract Token extractToken() throws IOException;
 
-
-
+    public char getChar() throws IOException {
+        return source.readOnCurrOffset();
+    }
 
 }

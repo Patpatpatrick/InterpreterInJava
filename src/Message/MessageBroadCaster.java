@@ -6,12 +6,16 @@ public class MessageBroadCaster implements MessageBroadCasterAPI {
 
     private Message message;
 
-    private ArrayList<MessageObserver> listeners = new ArrayList<MessageObserver>();
+    private ArrayList<MessageObserver> listeners;
 
     public MessageBroadCaster(Message message) {
         this.message=message;
+        listeners = new ArrayList<MessageObserver>();
     }
 
+    public void setMessage(Message message) {
+        this.message=message;
+    }
 
     @Override
     public void addMessageListener(MessageObserver messageObserver) {
@@ -34,7 +38,7 @@ public class MessageBroadCaster implements MessageBroadCasterAPI {
 
     private void notifyObservers(){
         for (MessageObserver observer : listeners) {
-            observer.messageReceived(message);
+            observer.updateOnMessage(message);
         }
     }
 }

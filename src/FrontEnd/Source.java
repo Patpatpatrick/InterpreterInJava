@@ -55,7 +55,7 @@ public class Source {
     }
 
 
-    private char readOnCurrOffset() throws IOException {
+    public char readOnCurrOffset() throws IOException {
         char ret;
         // the first time that we read the file, so current offset is 0 dist away from the start of this line
         if (toReadCharOnThisPos == 0) {
