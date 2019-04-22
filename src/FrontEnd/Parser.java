@@ -7,8 +7,8 @@ import Message.MessageBroadCaster;
 import java.io.IOException;
 
 /**
- * This class is responsible for requesting a token from Scanner
- * So it has a member of Scanner
+ * This class is responsible for requesting a token from Lexer
+ * So it has a member of Lexer
  */
 
 //TODO: should make the implementation of interface methods right in this abstract class!!
@@ -21,13 +21,21 @@ public abstract class Parser extends MessageBroadCaster{
 
     private boolean succeed;
 
-    //Parser instance will refer to Scanner to obtain token instance
-    private final Scanner scanner;
+    //Parser instance will refer to Lexer to obtain token instance
+    private final Lexer lexer;
 
-    public Parser(Scanner scanner) {
-        this.scanner=scanner;
+    public Parser(Lexer lexer) {
+        this.lexer=lexer;
         table = null;
         root = null;
+    }
+
+    public SymTab getTable() {
+        return table;
+    }
+
+    public AST getRoot() {
+        return root;
     }
 
     /**
@@ -37,11 +45,11 @@ public abstract class Parser extends MessageBroadCaster{
     public abstract void parse() throws Exception;
 
     private Token currentToken() throws IOException {
-        return scanner.currentToken();
+        return lexer.getCurrentToken();
     }
 
-    private Token nextToken() throws IOException {
-        return scanner.nextToken();
+    public Token nextToken() throws IOException {
+        return lexer.nextToken();
     }
 
     /**

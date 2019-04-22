@@ -27,6 +27,7 @@ public class Source extends MessageBroadCaster{
     // in constructor numOfLineRead is -1 means no line has been read at all
     // this is the vertical coordination
     private int numOfLineRead;
+    //private int numOfLineReading;
 
 
     // in constructor numOfLineRead is -1 means no char in this line has been read at all
@@ -36,7 +37,8 @@ public class Source extends MessageBroadCaster{
     public Source(String path) {
         readFromFileSystem(path);
         this.numOfLineRead= 0;
-        this.toReadCharOnThisPos= 0;
+        //this.numOfLineReading = -1;
+        this.toReadCharOnThisPos= -1;
     }
 
     /**
@@ -54,33 +56,40 @@ public class Source extends MessageBroadCaster{
 
 
     public char readOnCurrOffset() throws IOException {
-        char ret;
+        char ret = '0';
+        System.out.println("====999===");
         // the first time that we read the file, so current offset is 0 dist away from the start of this line
-        if (toReadCharOnThisPos == 0) {
+        if (toReadCharOnThisPos == -1) {
             readWholeLine();
-            if(currentWholeLine != null){
-                numOfLineRead++;
-                ret=currentWholeLine.charAt(toReadCharOnThisPos);
-            }else{
+            if(currentWholeLine == null){
                 ret = EOF;
+                System.out.println("return value is " + ret);
+                return ret;
             }
+            ret=readNextChar();
+            //System.out.println("return value is " + ret);
         }
         else if (toReadCharOnThisPos == currentWholeLine.length()) {
+            System.out.println("return eol");
             ret = EOL;
         }
         else{
+            System.out.println("=======");
+            System.out.println(toReadCharOnThisPos);
+            System.out.println(currentWholeLine.length());
+            System.out.println("=======");
             ret=currentWholeLine.charAt(toReadCharOnThisPos);
+            //System.out.println("return value is " + ret);
         }
         return ret;
     }
 
+    public void cursorMoveForward() {
+        if(currentWholeLine !=null)
+            toReadCharOnThisPos = (toReadCharOnThisPos + 2) % (currentWholeLine.length() + 2) - 1;
+    }
     public char readNextChar() throws IOException {
-        if(toReadCharOnThisPos == currentWholeLine.length()){
-            toReadCharOnThisPos = 0;
-        }
-        else{
-            toReadCharOnThisPos++;
-        }
+        cursorMoveForward();
         return readOnCurrOffset();
     }
 
@@ -102,8 +111,10 @@ public class Source extends MessageBroadCaster{
     }
 
     private void readWholeLine() throws IOException {
-        assert toReadCharOnThisPos == 0;
+        // assert toReadCharOnThisPos == 0;
         currentWholeLine= reader.readLine();
+        numOfLineRead++;
+        System.out.println("now whole line is " + currentWholeLine);
     }
 
     /**
@@ -115,5 +126,11 @@ public class Source extends MessageBroadCaster{
         reader.close();
     }
 
+    public int getNumOfLineRead() {
+        return numOfLineRead;
+    }
 
+    public int getCurrentOffset() {
+        return toReadCharOnThisPos;
+    }
 }

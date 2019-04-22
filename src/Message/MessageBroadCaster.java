@@ -2,11 +2,11 @@ package Message;
 
 import java.util.ArrayList;
 
-public class MessageBroadCaster implements MessageBroadCasterAPI {
+public abstract class MessageBroadCaster implements MessageBroadCasterAPI {
 
     private Message message;
 
-    private ArrayList<MessageObserver> listeners;
+    private ArrayList<MessageObserver> listeners = new ArrayList<MessageObserver>();
 
     public MessageBroadCaster(Message message) {
         this.message=message;
