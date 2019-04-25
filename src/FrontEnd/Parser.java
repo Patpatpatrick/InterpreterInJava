@@ -19,8 +19,6 @@ public abstract class Parser extends MessageBroadCaster{
 
     private AST root;
 
-    private boolean succeed;
-
     //Parser instance will refer to Lexer to obtain token instance
     private final Lexer lexer;
 

@@ -1,6 +1,6 @@
-package FrontEnd.PascalTDWidgets;
+package FrontEnd.PascalWidgets;
 
-import FrontEnd.LastToken;
+import FrontEnd.EoFToken;
 import FrontEnd.Parser;
 import FrontEnd.Lexer;
 import FrontEnd.Token;
@@ -19,7 +19,9 @@ public class PascalParser extends Parser {
     public void parse() throws Exception {
         Token token;
         long startTime = System.currentTimeMillis();
-        while (!((token = nextToken()) instanceof LastToken)) {}
+        while (!((token = nextToken()) instanceof EoFToken)) {
+
+        }
         float elapsedTime = (System.currentTimeMillis() - startTime)/1000f;
         setMessage(
                 new Message(PARSER_SUMMARY,

@@ -1,11 +1,11 @@
 import BackEnd.BackEndCoreWidget;
 import BackEnd.Interpreter;
 import FrontEnd.Parser;
-import FrontEnd.PascalTDWidgets.PascalLexer;
-import FrontEnd.PascalTDWidgets.PascalParser;
-import FrontEnd.PascalTDWidgets.PascalTokenDict;
+import FrontEnd.PascalWidgets.PascalLexer;
+import FrontEnd.PascalWidgets.PascalParser;
+import FrontEnd.PascalWidgets.PascalTokenType.PascalConst;
 import FrontEnd.Source;
-import FrontEnd.TokenTag;
+import FrontEnd.TokenType.TokenType;
 import Intermediate.AST;
 import Intermediate.SymTab;
 import Message.Message;
@@ -13,17 +13,6 @@ import Message.MessageObserver;
 import Message.MessageType;
 
 
-/**
- *
- * Pascal外壳程序，根据参数选择性的调用编译器或者解释器
- *
- * <p>
- * Copyright (c) 2009 by Ronald Mak
- * </p>
- * <p>
- * For instructional purposes only. No warranties.
- * </p>
- */
 public class Pascal {
     private Parser parser; // 语言无关的 parser
     private Source source; // 语言无关的 scanner
@@ -67,7 +56,7 @@ public class Pascal {
             // 交由后端处理
             interpreter.performAST(iCode, symTab);
         } catch (Exception ex) {
-            System.out.println("***** 翻译器出现错误 *****");
+            System.out.println("***** Parser Error Occurs! *****");
             ex.printStackTrace();
         }
     }
@@ -82,29 +71,8 @@ public class Pascal {
      */
     public static void main(String args[]) {
         try {
-//            String operation = args[0];
-//
-//            // 翻译操作类型，compile或execute
-//            if (!(operation.equalsIgnoreCase("compile") || operation
-//                    .equalsIgnoreCase("execute"))) {
-//                throw new Exception();
-//            }
-//
-//            int i = 0;
-//            String flags = "";
-//
-//            // 参数标识
-//            while ((++i < args.length) && (args[i].charAt(0) == '-')) {
-//                flags += args[i].substring(1);
-//            }
-//
-//            // 源文件
-//            if (i < args.length) {
             String path = "/Users/mac/Workspaces/Interpreter/hello.pas";
             new Pascal(path);
-//            } else {
-//                throw new Exception();
-//            }
         } catch (Exception ex) {
             System.out.println(USAGE);
         }
@@ -158,14 +126,14 @@ public class Pascal {
                     Object body[] = (Object[]) message.getBody();
                     int line = (Integer) body[0];
                     int position = (Integer) body[1];
-                    TokenTag tokenType = (TokenTag) body[2];
+                    TokenType tokenType = (TokenType) body[2];
                     String tokenText = (String) body[3];
                     Object tokenValue = body[4];
 
                     System.out.println(String.format(TOKEN_FORMAT, tokenType, line,
                             position, tokenText));
                     if (tokenValue != null) {
-                        if (tokenType == PascalTokenDict.STRING) {
+                        if (tokenType == PascalConst.STRING) {
                             tokenValue = "\"" + tokenValue + "\"";
                         }
 

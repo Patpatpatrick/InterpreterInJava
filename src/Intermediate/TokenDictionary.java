@@ -1,11 +1,10 @@
 package Intermediate;
 
-import FrontEnd.TokenTag;
-import jdk.nashorn.api.tree.RegExpLiteralTree;
+import FrontEnd.TokenType.TokenType;
 
 import java.util.HashMap;
 
 public abstract class TokenDictionary  {
-    private HashMap<String,TokenTag> dict;
+    private HashMap<String,TokenType> dict;
     // keys are pattern
 }

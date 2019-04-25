@@ -37,7 +37,8 @@ public class Source extends MessageBroadCaster{
     public Source(String path) {
         readFromFileSystem(path);
         this.numOfLineRead= 0;
-        //this.numOfLineReading = -1;
+        // by -1 it means we need to start a new line.
+        // I tried to use 0 but it is not idempotent so I changed it into -1 which fixed the bug.
         this.toReadCharOnThisPos= -1;
     }
 
@@ -57,27 +58,27 @@ public class Source extends MessageBroadCaster{
 
     public char readOnCurrOffset() throws IOException {
         char ret = '0';
-        System.out.println("====999===");
-        // the first time that we read the file, so current offset is 0 dist away from the start of this line
+//      System.out.println("====999===");
+//      the first time that we read the file, so current offset is 0 dist away from the start of this line
         if (toReadCharOnThisPos == -1) {
             readWholeLine();
             if(currentWholeLine == null){
                 ret = EOF;
-                System.out.println("return value is " + ret);
+//                System.out.println("return value is " + ret);
                 return ret;
             }
             ret=readNextChar();
             //System.out.println("return value is " + ret);
         }
         else if (toReadCharOnThisPos == currentWholeLine.length()) {
-            System.out.println("return eol");
+//            System.out.println("return eol");
             ret = EOL;
         }
         else{
-            System.out.println("=======");
-            System.out.println(toReadCharOnThisPos);
-            System.out.println(currentWholeLine.length());
-            System.out.println("=======");
+//            System.out.println("=======");
+//            System.out.println(toReadCharOnThisPos);
+//            System.out.println(currentWholeLine.length());
+//            System.out.println("=======");
             ret=currentWholeLine.charAt(toReadCharOnThisPos);
             //System.out.println("return value is " + ret);
         }
@@ -88,6 +89,7 @@ public class Source extends MessageBroadCaster{
         if(currentWholeLine !=null)
             toReadCharOnThisPos = (toReadCharOnThisPos + 2) % (currentWholeLine.length() + 2) - 1;
     }
+
     public char readNextChar() throws IOException {
         cursorMoveForward();
         return readOnCurrOffset();
@@ -99,7 +101,7 @@ public class Source extends MessageBroadCaster{
      * @throws Exception
      */
     public char peekChar()
-            throws Exception
+            throws IOException
     {
         readOnCurrOffset();
         if (currentWholeLine == null) {
@@ -114,7 +116,7 @@ public class Source extends MessageBroadCaster{
         // assert toReadCharOnThisPos == 0;
         currentWholeLine= reader.readLine();
         numOfLineRead++;
-        System.out.println("now whole line is " + currentWholeLine);
+        //System.out.println("now whole line is " + currentWholeLine);
     }
 
     /**
