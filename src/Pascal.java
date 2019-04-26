@@ -4,6 +4,7 @@ import FrontEnd.Parser;
 import FrontEnd.PascalWidgets.PascalLexer;
 import FrontEnd.PascalWidgets.PascalParser;
 import FrontEnd.PascalWidgets.PascalTokenType.PascalConst;
+import FrontEnd.PascalWidgets.PascalTokenType.PascalSpecialChar;
 import FrontEnd.Source;
 import FrontEnd.TokenType.TokenType;
 import Intermediate.AST;
@@ -14,11 +15,11 @@ import Message.MessageType;
 
 
 public class Pascal {
-    private Parser parser; // 语言无关的 parser
-    private Source source; // 语言无关的 scanner
-    private AST iCode; // 抽象语法树
-    private SymTab symTab; // 符号表
-    private BackEndCoreWidget interpreter; // 后端
+    private Parser parser;
+    private Source source;
+    private AST iCode;
+    private SymTab symTab;
+    private BackEndCoreWidget interpreter;
 
     /**
      * 编译或者解释源程序
@@ -28,17 +29,11 @@ public class Pascal {
      */
     public Pascal(String filePath) {
         try {
-//            // 显示中间码结构
-//            boolean intermediate = flags.indexOf('i') > -1;
-//            // 显示符号引用
-//            boolean xref = flags.indexOf('x') > -1;
-
             source = new Source(filePath);
             SourceMessageListener a = new SourceMessageListener();
             source.addMessageListener(a);
 
 
-            // top-down是Parser的一种，还有一种本书没有实现的bottom-up。
             parser = new PascalParser(new PascalLexer(source));
 
             ParserMessageListener b = new ParserMessageListener();
@@ -49,11 +44,11 @@ public class Pascal {
             interpreter.addMessageListener(c);
 
             parser.parse();
+
+            //always close the buffer when done.
             source.close();
-            // 生成中间码和符号表
             iCode = parser.getRoot();
             symTab = parser.getTable();
-            // 交由后端处理
             interpreter.performAST(iCode, symTab);
         } catch (Exception ex) {
             System.out.println("***** Parser Error Occurs! *****");
@@ -133,7 +128,8 @@ public class Pascal {
                     System.out.println(String.format(TOKEN_FORMAT, tokenType, line,
                             position, tokenText));
                     if (tokenValue != null) {
-                        if (tokenType == PascalConst.STRING) {
+                        // TODO stub change back
+                        if (tokenType == PascalSpecialChar.DOT_DOT) {
                             tokenValue = "\"" + tokenValue + "\"";
                         }
 

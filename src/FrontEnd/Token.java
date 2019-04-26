@@ -13,6 +13,12 @@ public abstract class Token {
     protected String content;
     protected TokenType type;
 
+    public void setValue(Object value) {
+        this.value=value;
+    }
+
+    //TODO I might need another field called "Value" to represent the value of a token of type number.
+    protected Object value;
     protected int numOfLine;
     protected int offSet;
 

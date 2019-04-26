@@ -10,72 +10,63 @@ import java.io.IOException;
  *
  * An instance of class Lexer contains a member Source represents the source code,
  * The scanner will organize the characters grabbed from source base on the language to form a token ready for use.
- * So we would expect the subclass to call readOnCurrOffset on source.
+ * So we would expect the subclass to call readCharOnCurrOffset on source.
  */
 
 public abstract class Lexer extends MessageBroadCaster {
 
     protected Source source;
 
-    // Lexer owns the current Token member
-    private Token currentToken;
+    protected Token currentToken;
+
+    protected String content;
+
+    protected boolean succeedInExtraction;
 
     public Lexer(Source source) {
         this.source=source;
+        content = "";
+        succeedInExtraction = false;
+        //Succeeding in generating an error token also counts.
     }
 
-    // currentToken should be assigned in this method override in the subclass.
-    // this method overridden in subtype will primarily call token constructor
-    public abstract Token extractToken() throws IOException;
+    public Token getCurrentToken() { return currentToken; }
 
-    protected abstract boolean isRW(String content) throws IOException;
-
-    protected abstract boolean isAValidIdentifier(String content);
-
-    protected boolean isAValidConst(String content){
-
-        return true;
-    }
-
-    protected abstract boolean isSC(String content);
-
-    public char readOnCurrOffset() throws IOException {
-        return source.readOnCurrOffset();
-    }
-
-    public Token getCurrentToken() {
-        return currentToken;
-    }
 
     public Token nextToken() throws IOException {
-        currentToken = extractToken();
+        extractToken();
+        // reinitialize the content to be empty;
+        content = "";
+        succeedInExtraction = false;
         return currentToken;
     }
 
-    protected String readMeaningfulChars() throws IOException, ErrorTokenTypeException {
-        char c = skipBlankReadAChar();
-        if(c == Source.EOL){
-            source.cursorMoveForward();
-            return "";
-        }else if(c == Source.EOF){
-            return "";
-        }
-        else {
-            return readNormalContentByThisChar(c);
-        }
-    }
+    public abstract void extractToken() throws IOException;
 
-    protected abstract String readNormalContentByThisChar(char c) throws IOException, ErrorTokenTypeException;
+    protected abstract void tryToExpandAsRWFollowedByBlank(char currentChar,int nlr,int pos) throws IOException;
+    protected abstract boolean contentIsRW() throws IOException;
+    protected abstract void tryToExtractAValidIdentifier(int nlr,int pos) throws IOException;
 
-    protected abstract String readLegalWordOrNumber(char c, boolean continueCondition, String InitialFlag) throws IOException;
+    protected abstract void tryToExtractAValidConst(int nlr,int pos) throws Exception, ErrorTokenTypeException;
+    protected abstract void tryToExtractValidString(char startChar,int nlr,int pos) throws IOException, ErrorTokenTypeException;
+    protected abstract void tryToExtractPositiveNumber(char startChar,int nlr,int pos) throws Exception, ErrorTokenTypeException;
+    protected abstract void tryToExtractNegativeNum(int nlr,int pos);
 
+    protected abstract void tryToExtractSpecialCharacters(char currentChar,int nlr,int pos) throws IOException, ErrorTokenTypeException;
+    protected abstract boolean contentIsSC() throws IOException;
+
+    protected abstract String unsignedIntegerDigits() throws IOException;
+
+
+    //this method read something under some rule.
+    protected abstract String readLegalRWOrID(char c,boolean continueCondition,WordKind initialAttempt) throws IOException;
     protected abstract String readLegalSC(char c) throws Exception, ErrorTokenTypeException;
 
     protected char skipBlankReadAChar() throws IOException {
-        char c = source.readOnCurrOffset();
-        while(c== ' '){
+        char c = source.readCharOnCurrOffset();
+        while(c == ' '){
             source.cursorMoveForward();
-            c = source.readOnCurrOffset();
+            c = source.readCharOnCurrOffset();
             if(c == Source.EOL || c == Source.EOF)
                 break;
         }

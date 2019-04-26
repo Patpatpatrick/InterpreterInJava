@@ -7,10 +7,14 @@ import FrontEnd.Token;
 
 import Message.Message;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static Message.MessageType.PARSER_SUMMARY;
 
 public class PascalParser extends Parser {
 
+    public List<Token> plist = new ArrayList<>();
     public PascalParser(Lexer lexer) {
         super(lexer);
     }
@@ -20,7 +24,7 @@ public class PascalParser extends Parser {
         Token token;
         long startTime = System.currentTimeMillis();
         while (!((token = nextToken()) instanceof EoFToken)) {
-
+            plist.add(token);
         }
         float elapsedTime = (System.currentTimeMillis() - startTime)/1000f;
         setMessage(

@@ -17,6 +17,7 @@ public enum PascalSpecialChar implements TokenType {
     SEMICOLON(";"),
     COLON(":"),
     QUOTE("'"),
+    DOUBLE_QUOTE("\""),
     EQUALS("="),
     NOT_EQUALS("<>"),
     LESS_THAN("<"),

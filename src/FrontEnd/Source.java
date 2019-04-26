@@ -1,6 +1,5 @@
 package FrontEnd;
 
-import Message.Message;
 import Message.MessageBroadCaster;
 
 import java.io.*;
@@ -56,7 +55,7 @@ public class Source extends MessageBroadCaster{
     }
 
 
-    public char readOnCurrOffset() throws IOException {
+    public char readCharOnCurrOffset() throws IOException {
         char ret = '0';
 //      System.out.println("====999===");
 //      the first time that we read the file, so current offset is 0 dist away from the start of this line
@@ -92,7 +91,7 @@ public class Source extends MessageBroadCaster{
 
     public char readNextChar() throws IOException {
         cursorMoveForward();
-        return readOnCurrOffset();
+        return readCharOnCurrOffset();
     }
 
     /**
@@ -103,7 +102,7 @@ public class Source extends MessageBroadCaster{
     public char peekChar()
             throws IOException
     {
-        readOnCurrOffset();
+        readCharOnCurrOffset();
         if (currentWholeLine == null) {
             return EOF;
         }
